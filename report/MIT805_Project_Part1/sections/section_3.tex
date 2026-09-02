@@ -1,0 +1,4 @@
+\section{Data Quality and Preparation}
+
+Firstly, the \emph{Timestamp} column was converted to datetime format and another column was added to easily distinguish between internal and external transfers. Secondly, missing values and duplicates were handled. It was confirmed that there were no
+missing values and zero-valued transactions. The duplicate rows were removed. Next, data after 5 November 2022 was removed since this represented laundered sequences spanning multiple days without normal transactions and was outside the main simulation window mentioned on the Kaggle page. Lastly, due to the dataset's size ($\pm$ 176 million transactions), Polars' lazy execution, aggregation, and sampling were used to limit memory and computational overhead.

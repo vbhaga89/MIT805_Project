@@ -3,6 +3,24 @@
 *.pdf
 *.csv
 *.parquet
+*.png
+*.jpg
+*.jpeg
 
 .DS_Store
 data/.DS_Store
+
+# Ignore all auxiliary latex files
+*.aux
+*.log
+*.toc
+*.out
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.xml

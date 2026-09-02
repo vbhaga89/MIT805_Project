@@ -1,0 +1,13 @@
+\section{Exploratory Data Analysis}
+
+% The EDA considered transaction amounts, temporal behaviour, payment characteristics and laundering prevalence. Supporting statistics and visualisations are provided in the Appendix (Page \pageref{app:appendix}).
+
+The first key finding was that laundered transactions exhibited higher typical transaction values than legitimate transactions with a median amount of 3,750 compared to 1,380 (Figure \ref{fig:amounts}). Payment format was also strongly correlated to laundering. The ACH format accounted for roughly 74\% of all laundered transactions (Table \ref{tab:payment_format_laundering}). This implies that laundered transactions generally involve higher amounts and are mostly associated with ACH payments.
+
+The next key finding was that laundering was concentrated in low-frequency relationships. Account pairs interacting only once had a laundering rate of 0.73\% compared to 0.015\% for pairs with more than 100 transactions (Figure \ref{fig:relationship_pairs}). Reciprocal relationships were also notable with a laundering rate of 2.32\% versus 0.032\% for one-way relationships (Table \ref{tab:account_relationships}). This implies that laundered transactions rarely occur in accounts that interact frequently. It also implies that generally, laundered transactions do occur more frequently in both directions than in one direction of an interacting pair.
+
+The third key finding showed that daily transaction volumes had an inverse relationship relative to daily laundered volumes (Figure \ref{fig:transaction_temporal}-\ref{fig:laundering_temporal}). This shows that laundering occurred mainly on weekends when overall volumes were low. 
+
+\newpage
+
+The final key finding showed that a single bank, Bank 70, accounted for 24.3\% of all laundered transactions (Table \ref{tab:from_bank_laundering}). This raises suspicion in that bank. Further investigation may be needed to identify if the bank could potentially be a laundering front.

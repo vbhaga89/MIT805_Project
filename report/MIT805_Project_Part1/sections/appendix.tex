@@ -1,0 +1,344 @@
+\section*{Appendix}
+\addcontentsline{toc}{section}{Appendix}
+\label{app:appendix}
+%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Code Repository}
+
+The project code can be found at the following link: \href{https://github.com/vbhaga89/MIT805_Project}{GitHub Repository}
+
+\subsection*{Dataset Details}
+
+\begin{table}[H]
+\centering
+\caption{Description of variables in the \texttt{LI\_Large\_Trans.csv} dataset}
+\label{tab:li_large_columns}
+\renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{p{3.0cm} p{2.2cm} p{8.2cm}}
+    \toprule
+    \textbf{Variable} & \textbf{Data Type} & \textbf{Description} \\
+    \midrule
+    
+    \texttt{Timestamp}
+    & Datetime
+    & Date and time at which the transaction occurred. \\
+    \midrule
+    
+    \texttt{From Bank}
+    & Integer
+    & Identifier of the bank from which the transaction originated. \\
+    \midrule
+    
+    \texttt{From Account}
+    & String
+    & Identifier of the account sending the funds. \\
+    \midrule
+    
+    \texttt{To Bank}
+    & Integer
+    & Identifier of the bank receiving the transaction. \\
+    \midrule
+    
+    \texttt{To Account}
+    & String
+    & Identifier of the account receiving the funds. \\
+    \midrule
+    
+    \texttt{Amount Received}
+    & Float
+    & Monetary amount received by the destination account. \\
+    \midrule
+    
+    \texttt{Receiving Currency}
+    & Categorical
+    & Currency in which the destination account received the funds. \\
+    \midrule
+    
+    \texttt{Amount Paid}
+    & Float
+    & Monetary amount paid by the originating account. \\
+    \midrule
+    
+    \texttt{Payment Currency}
+    & Categorical
+    & Currency in which the originating account made the payment. \\
+    \midrule
+    
+    \texttt{Payment Format}
+    & Categorical
+    & Payment mechanism used for the transaction, such as cheque, credit card, ACH, or wire transfer. \\
+    \midrule
+    
+    \texttt{Is Laundering}
+    & Binary
+    & Target variable indicating whether the transaction is associated with money laundering, where 1 denotes laundering and 0 denotes a legitimate transaction. \\
+    
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Key Finding 1: Tables and Figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/amounts.png}
+    \caption{Amount Paid Distribution by Laundering Status}
+    \label{fig:amounts}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[H]
+\centering
+\caption{Money laundering statistics by payment format}
+\label{tab:payment_format_laundering}
+\renewcommand{\arraystretch}{1.15}
+
+\resizebox{\textwidth}{!}{%
+    \begin{tabular}{lrrrrr}
+    \hline
+    \textbf{Payment Format} &
+    \textbf{Transactions} &
+    \textbf{Laundering} &
+    \textbf{Laundering Rate} &
+    \textbf{Share of Laundering} &
+    \textbf{Relative Risk} \\
+    \hline
+    
+    ACH
+    & 21,561,443
+    & 71,367
+    & 0.330994
+    & 73.621284
+    & 6.011551 \\
+    \hline
+    
+    Bitcoin
+    & 3,586,541
+    & 1,497
+    & 0.041739
+    & 1.544286
+    & 0.758076 \\
+    \hline
+    
+    Cash
+    & 18,040,752
+    & 3,514
+    & 0.019478
+    & 3.624997
+    & 0.353764 \\
+    \hline
+    
+    Cheque
+    & 69,361,333
+    & 13,003
+    & 0.018747
+    & 13.413728
+    & 0.340481 \\
+    \hline
+    
+    Credit Card
+    & 49,911,890
+    & 7,554
+    & 0.015135
+    & 7.792610
+    & 0.274878 \\
+    \hline
+    
+    Wire
+    & 6,339,912
+    & 3
+    & 0.000047
+    & 0.003095
+    & 0.000859 \\
+    \hline
+    
+    Reinvestment
+    & 7,258,238
+    & 0
+    & 0.000000
+    & 0.000000
+    & 0.000000 \\
+    \hline
+    
+    \end{tabular}%
+}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Key Finding 2: Tables and Figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/relationship_pairs.png}
+    \caption{Laundering Rate by Account-Pair Transaction Frequency}
+    \label{fig:relationship_pairs}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[H]
+\centering
+\caption{Money laundering statistics by account relationship directionality}
+\label{tab:account_relationships}
+\renewcommand{\arraystretch}{1.15}
+
+\resizebox{\textwidth}{!}{%
+    \begin{tabular}{rrrrrr}
+    \hline
+    \textbf{Directions} &
+    \textbf{Account Relationships} &
+    \textbf{Transactions} &
+    \textbf{Laundering} &
+    \textbf{Laundering Rate} &
+    \textbf{Share of Laundering} \\
+    \hline
+    
+    1
+    & 7,196,453
+    & 174,281,976
+    & 55,696
+    & 0.031957
+    & 57.455281 \\
+    \hline
+    
+    2
+    & 488,924
+    & 1,778,133
+    & 41,242
+    & 2.319399
+    & 42.544719 \\
+    \hline
+    
+    \end{tabular}%
+}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\subsection*{Key Finding 3: Tables and Figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/transactions_temporal.png}
+    \caption{Daily Transaction Volume}
+    \label{fig:transaction_temporal}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/laundering_temporal.png}
+    \caption{Daily Money Laundering Rate}
+    \label{fig:laundering_temporal}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Key Finding 4: Tables and Figures}
+
+\begin{table}[H]
+\centering
+\caption{Money laundering statistics by originating bank}
+\label{tab:from_bank_laundering}
+\renewcommand{\arraystretch}{1.15}
+
+\resizebox{\textwidth}{!}{%
+    \begin{tabular}{rrrrrr}
+    \hline
+    \textbf{From Bank} &
+    \textbf{Transactions} &
+    \textbf{Laundering} &
+    \textbf{Laundering Rate} &
+    \textbf{Share of Laundering} &
+    \textbf{Relative Risk} \\
+    \hline
+    
+    70
+    & 16,716,238
+    & 23,647
+    & 0.141461
+    & 24.393943
+    & 2.569238 \\
+    \hline
+    
+    11
+    & 983,200
+    & 378
+    & 0.038446
+    & 0.389940
+    & 0.698259 \\
+    \hline
+    
+    0
+    & 873,192
+    & 301
+    & 0.034471
+    & 0.310508
+    & 0.626071 \\
+    \hline
+    
+    12
+    & 885,707
+    & 249
+    & 0.028113
+    & 0.256865
+    & 0.510595 \\
+    \hline
+    
+    20
+    & 878,243
+    & 245
+    & 0.027897
+    & 0.252739
+    & 0.506662 \\
+    \hline
+    
+    3
+    & 539,399
+    & 224
+    & 0.041528
+    & 0.231076
+    & 0.754232 \\
+    \hline
+    
+    27
+    & 721,684
+    & 183
+    & 0.025357
+    & 0.188780
+    & 0.460544 \\
+    \hline
+    
+    14
+    & 543,767
+    & 175
+    & 0.032183
+    & 0.180528
+    & 0.584510 \\
+    \hline
+    
+    1226
+    & 332,021
+    & 167
+    & 0.050298
+    & 0.172275
+    & 0.913520 \\
+    \hline
+    
+    29
+    & 511,840
+    & 165
+    & 0.032237
+    & 0.170212
+    & 0.585486 \\
+    \hline
+    
+    \end{tabular}%
+}
+\end{table}
