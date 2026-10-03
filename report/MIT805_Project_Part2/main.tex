@@ -1,0 +1,164 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                              Document Settings                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,11pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                   Margins                                    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addtolength{\oddsidemargin}{-1.cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\topmargin}{-2cm}
+\addtolength{\textheight}{3.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                   Packages                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\usepackage[pdftex]{graphicx}	% Include graphics
+\usepackage{float}				% Place floats inline, use the [H] placement
+\usepackage{array}				% Additional tables features
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[mathscr]{euscript}
+\usepackage[explicit]{titlesec}
+\usepackage{times}				% Times new roman font
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{import}
+\usepackage{csquotes}           % Recommended for biblatex
+\usepackage[style=ieee,backend=biber]{biblatex}
+\usepackage{booktabs}
+
+\usepackage{parskip}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    columns=fullflexible,
+    captionpos=t,
+    xleftmargin=0.5cm,
+    xrightmargin=0.5cm
+}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.5,0}
+\definecolor{codeblue}{rgb}{0,0,0.75}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codegray}{rgb}{0.45,0.45,0.45}
+\definecolor{codebg}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{codeblue}\bfseries,
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codepurple},
+    numbers=none,
+    numberstyle=\tiny\color{codegray},
+    numbersep=8pt,
+    breaklines=true,
+    showstringspaces=false,
+    columns=fullflexible,
+    frame=single,
+    framesep=4pt,
+    aboveskip=0.7em,
+    belowskip=0.7em
+}
+
+\lstset{style=pythonstyle}
+
+\defbibheading{bibsection}{
+  \phantomsection
+  \section*{#1}
+  \addcontentsline{toc}{section}{#1}
+}
+
+\hypersetup{
+    colorlinks=true,       % true = colored text; false = boxed links
+    linkcolor=blue,        % Color of internal links (sections, figures)
+    urlcolor=blue,         % Color of external web links
+    citecolor=blue,       % Color of bibliographic citations
+}
+
+% Bibliography file
+\addbibresource{references.bib}
+
+\newenvironment{partanswer}[1]
+{%
+    \par\noindent
+    \settowidth{\leftmargini}{\textbf{#1}\hspace{0.8em}}%
+    \begin{list}{}{%
+        \setlength{\leftmargin}{\leftmargini}%
+        \setlength{\labelwidth}{\leftmargini}%
+        \setlength{\labelsep}{0pt}%
+        \setlength{\itemindent}{0pt}%
+        \setlength{\listparindent}{0pt}%
+        \setlength{\parsep}{\parskip}%
+        \setlength{\topsep}{0pt}%
+    }%
+    \item[\textbf{#1}\hspace{0.8em}]%
+}
+{%
+    \end{list}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Commands 									   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand\thesection{\arabic{section}} 
+\titleformat{\section}{\normalfont\fontsize{16}{15}\bfseries}{\thesection}{1em}{#1}
+\titleformat{\subsection}{\normalfont\fontsize{14}{15}\bfseries}{\thesubsection}{1em}{#1}
+\titleformat{\subsubsection}{\normalfont\fontsize{12}{15}\bfseries\itshape}{\thesubsubsection}{1em}{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                   Document                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+	% Title page
+	\input{title_page.tex}
+
+
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\setcounter{page}{1}
+
+\import{sections/}{section_1.tex}
+
+\import{sections/}{section_2.tex}
+
+\import{sections/}{section_3.tex}
+
+\import{sections/}{section_4.tex}
+
+\printbibliography[title={References}, heading=bibsection]
+
+\newpage
+
+\import{sections/}{appendix.tex}
+
+\end{document}

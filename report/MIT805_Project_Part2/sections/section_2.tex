@@ -1,0 +1,115 @@
+\section{PySpark MapReduce-Style Implementation}
+
+The cleaned transaction dataset (processing dataset) was processed using PySpark in Google Colab. All substantial processing was performed using Spark DataFrames. RDDs was only used for two examples to show a similar flow to more traditional Hadoop MapReduce. Pandas was only used on small aggregated outputs for visualisation. The implementation followed a MapReduce-syle workflow in which transaction-level features were first mapped, records were then grouped by keys and aggregate statistics were reduced to compact outputs. Spark transformations were evaluated lazily and only executed when actions such as \texttt{show()}, \texttt{collect()} or conversion of final aggregated outputs were invoked.
+
+\subsection{Mapping / Transformation}
+
+In terms of mapping/transformation, three transformations were created for easier future analysis using grouping and aggregations. Transformations were applied using \texttt{withColumn()}. Firstly, a transformation was performed based on the type of transfer between accounts. This was done by analysing "From Account", "To Account", "From Bank" and "To Bank" to create a new column , "Transfer Type", which classifies transactions as Self-Transfer, Cross-Bank Transfer or Standard Transfer. Secondly, a boolean mapping was applied in which "Payment Currency" and "Receiving Currency" was compared to obtain a column, "Same Currency", that gives an indication of same sender-receiver currency. The "Timestamp" column was also transformed to a simple "Date" column for daily temporal analysis. Lastly, for unidirectional/bidirectional account analysis, transactions in either direction, A $\rightarrow$ B and B $\rightarrow$ A, were transformed into the same relationship key. This was important so that bidirectional activity could be indentified in subsequent grouping. An example of a transformation from the codebase can be seen below in \autoref{code_snippet_1}:
+
+\begin{lstlisting}[caption={PySpark Date Transformation}, label={code_snippet_1}]
+transactions = (
+    transactions
+    .withColumn("Date", F.to_date("Timestamp"))
+)
+\end{lstlisting}
+
+\subsection{Shuffle / Grouping}
+
+Group-based analyses were implemented using \texttt{groupBy()}. Grouping requires records sharing the same key to be brought together, potentially across different Spark partitions. This introduces a shuffle, where records are redistributed between executors before aggregation. For example, transactions were grouped by "Payment Format" to compare laundering prevalence across different payment methods. Another example, that emphasises the need for shuffling, is a larger grouping by sender bank to identify laundering patterns for sender banks. Because transactions belonging to the same sender bank may originally reside in different partitions, Spark must redistribute them by key before the pair-level statistics could be calculated. The same pattern was also applied to data, transfer type, account pair and reciprocal relationship analyses. An example of grouping can be seen below in \autoref{code_snippet_2}:
+
+\begin{lstlisting}[caption={PySpark Payment Format Grouping}, label={code_snippet_2}]
+payment_format_analysis = (
+    transactions
+    .groupBy("Payment Format")
+    .agg(
+        F.count("*").alias("Transactions"),
+        F.sum("Is Laundering").alias("Laundering")
+    )
+)
+\end{lstlisting}
+
+\subsection{Reduction / Aggregation}
+
+After grouping, Spark reduction operations converted the full transaction data into more compact statistical summaries. Aggregations included \texttt{count()}, \texttt{sum()}, \texttt{mean()}, minimum/maximum values and approximate percentiles. Two detailed, meaningful examples of reduction / aggregation are described:
+
+\subsubsection{Example 1 - transaction amount statistics}
+
+Laundering and non-laundering transaction sent amounts were reduced using means, medians, upper percentiles and maximum values. This is a useful analysis to understand how amounts are distributed based on whether a transaction is flagged as laundering or not. This can be used to set alerts on certain transferred amounts that can prompt a fraud team of a bank to investigate. \autoref{code_snippet_3} illustrates an example in code of statistics reduction:
+
+\begin{lstlisting}[caption={PySpark Statistics Reduction Aggregation}, label={code_snippet_3}]
+amount_by_class = (
+    transactions
+    .groupBy("Is Laundering")
+    .agg(
+        F.count("*").alias("Transactions"),
+        F.mean("Amount Paid").alias("Paid Mean"),
+        F.expr("percentile_approx(`Amount Paid`, 0.25, 10000)").alias("Paid P25"),
+        F.expr("percentile_approx(`Amount Paid`, 0.50, 10000)").alias("Paid Median"),
+        F.expr("percentile_approx(`Amount Paid`, 0.75, 10000)").alias("Paid P75"),
+        F.expr("percentile_approx(`Amount Paid`, 0.95, 10000)").alias("Paid P95"),
+        F.expr("percentile_approx(`Amount Paid`, 0.99, 10000)").alias("Paid P99"),
+        F.max("Amount Paid").alias("Paid Max")
+    )
+    .orderBy("Is Laundering")
+)
+\end{lstlisting}
+
+\subsubsection{Example 2 - laundering rates}
+
+Group-level counts and laundering totals were reduced further into laundering rates and relative risks. For example, after grouping by payment format, the total transaction count and sum of the binary laundering indicator were calculated, from which the laundering rate was obtained using the following equation:
+
+\[\text{Laundering Rate} = \frac{\text{Laundering Transactions}}{\text{Total Transactions}} \times 100.\]
+
+This same group/reduce pattern was applied to temporal analysis, account-pair frequency, transfer type analysis, sender bank frequency and reciprocal relationships, reducing approximately 176 million transaction records into small analytical tables. \autoref{code_snippet_4} illustrates the temporal analysis use case:
+
+\begin{lstlisting}[caption={PySpark Statistics Reduction Aggregation}, label={code_snippet_4}]
+amount_by_class = (
+    transactions
+    .groupBy("Is Laundering")
+    .agg(
+        F.count("*").alias("Transactions"),
+        F.mean("Amount Paid").alias("Paid Mean"),
+        F.expr("percentile_approx(`Amount Paid`, 0.25, 10000)").alias("Paid P25"),
+        F.expr("percentile_approx(`Amount Paid`, 0.50, 10000)").alias("Paid Median"),
+        F.expr("percentile_approx(`Amount Paid`, 0.75, 10000)").alias("Paid P75"),
+        F.expr("percentile_approx(`Amount Paid`, 0.95, 10000)").alias("Paid P95"),
+        F.expr("percentile_approx(`Amount Paid`, 0.99, 10000)").alias("Paid P99"),
+        F.max("Amount Paid").alias("Paid Max")
+    )
+    .orderBy("Is Laundering")
+)
+\end{lstlisting}
+
+\subsection{Explicit MapReduce Demonstration}
+
+Although the main analysis used Spark's DataFrame API, two RDD implementations were also included to demonstrate the more traditional MapReduce pattern.  Each transaction was mapped to a key-value pair such as ("Payment Format", (1, "Is Laundering")), after which \texttt{reduceByKey()} shuffled records by key and combined their transaction and laundering counts. \autoref{code_snippet_5} illustrates a small code snippet of such an example:
+
+\begin{lstlisting}[caption={PySpark RDD Example}, label={code_snippet_5}]
+payment_format_rdd = (
+    transactions
+    .select("Payment Format", "Is Laundering")
+    .rdd
+    .map(lambda r: (r["Payment Format"], (1, int(r["Is Laundering"]))))
+    .reduceByKey(lambda a, b: (a[0] + b[0], a[1] + b[1]))
+)
+\end{lstlisting}
+
+\subsection{Spark execution \& DAG}
+
+\subsubsection{Spark execution evidence}
+
+The physical execution plans were inspected using \texttt{explain()}. An example of such an execution plan can be seen in the \hyperref[app:appendix]{Appendix}. Grouped operations contain an \texttt{Exchange} operator which indicates repartitioning of records across the cluster before aggregation. The plan also shows partial and final aggregate stages, allowing aggregation to begin locally before shuffled results are later combined. This shows exactly how the execution roadmap flows in a singular linear direction from node to node which is essentially why it is called Directed Acyclic Graph (DAG).
+
+\subsubsection{Spark DAG vs Hadoop MapReduce}
+
+Traditional Hadoop MapReduce follows a fixed Map $\rightarrow$ Shuffle $\rightarrow$ Reduce execution model and normally materliases intermediate results to disk between jobs. Spark instead constructs a DAG of transformations and divides it into stages at shuffle boundaries. This allows Spark to optimise the complete sequence of transformations and retain intermediate data in memory where possible. This reduces repeated disk I/O which would normally occur in MapReduce. In addition, Spark's DAG scheduler also actively minimizes shuffles, that MapReduce forces between each Map and Reduce phase, by mapping out exactly where data needs to go before a job starts. This reduction in shuffling reduces one of the most expensive parts of big data processing.
+
+
+
+
+ 
+
+
+
+
+

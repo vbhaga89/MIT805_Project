@@ -1,0 +1,34 @@
+\section{Processing Objective \& Analytical Question}
+
+\subsubsection{Processing Objective}
+
+The objective of this analysis is to use distributed PySpark processing to identify
+transaction patterns and account relationships associated with money-laundering
+activity within the anti-money laundering (AML) transaction dataset. The dataset contains a large volume of financial transactions, making it suitable for demonstrating distributed processing and
+MapReduce-style analytical operations.
+
+The analysis focuses on determining whether laundering activity is concentrated within
+specific transaction characteristics, financial institutions, or repeated account
+relationships. Specifically, the analysis examines transaction frequency, transaction
+amounts, payment formats, transfer characteristics, originating banks, and sender-
+receiver relationships. These analyses extend the exploratory findings from Part 1 by
+applying distributed transformations, grouping operations and aggregations to extract
+meaningful patterns from the large-scale transaction dataset.
+
+\subsubsection{Central Question}
+
+How can distributed PySpark processing be used to identify transaction patterns and
+account relationships associated with money-laundering activity in the AML dataset?
+
+To address this question, the analysis aims to:
+\begin{enumerate}
+    \item Identify transaction characteristics associated with higher observed laundering rates.
+    \item Quantify laundering activity across originating banks and account relationships.
+    \item Compare laundering behaviour across payment formats, transfer types and account relationships.
+    \item Demonstrate how PySpark's distributed processing capabilities can perform large-scale analytical tasks through transformations, shuffle/grouping and reduction/aggregation operations.
+
+\end{enumerate}
+
+The resulting insights are intended to demonstrate how large-scale transaction analytics
+can support the identification and prioritisation of potentially higher-risk transaction
+patterns for further investigation.

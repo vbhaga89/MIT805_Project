@@ -1,0 +1,89 @@
+\section{Results \& technical interpretation}
+
+\subsection{Payment Format Risk Analysis}
+
+The PySpark aggregation identified differences in laundering activity across payment
+formats. Automated Clearing House (ACH) transactions represented the largest share of laundering transactions, accounting for approximately 73.6\% of all laundering transactions in the processing
+dataset. ACH transactions are a way to move money directly from one bank account to another without using paper cheques, cash, or credit cards. The laundering rate for ACH transactions was approximately 0.331\%, compared with an overall dataset laundering rate of approximately 0.055\%, resulting in
+a relative risk of approximately 6.01 times the dataset baseline. In contrast, wire
+transactions had a laundering rate close to zero, while reinvestment transactions
+contained no labelled laundering transactions in the analysed data. The relative laundering risk by payment format can be seen in \autoref{fig:laundering_format}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/laundering_by_format.png}
+    \caption{Relative Laundering Risk by Payment Format}
+    \label{fig:laundering_format}
+\end{figure}
+
+These results show that laundering activity is not distributed uniformly across payment
+formats. The groupBy() and aggregation operations in PySpark allow the transaction
+population to be grouped by payment format and reduced to transaction counts,
+laundering counts, laundering rates and relative risk measures. This provides a scalable
+method for comparing transaction characteristics across a large transaction population.
+
+\subsection{Account-pair Frequency}
+
+The account-pair analysis identified a strong relationship between transaction frequency
+and laundering rate. The laundering rate decreases as the number of transactions
+between an account pair increases. Relative to the overall dataset laundering rate of
+approximately 0.055\%, the 0.73\% rate for single-transaction pairs is approximately 13.2
+times higher, while pairs with 2–5 transactions have a rate approximately 9.4 times the
+baseline. The laundering rate by account-pair frequency can be seen in \autoref{fig:laundering_pairs}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/laundering_by_pairs.png}
+    \caption{Laundering Rate by Account-Pair Transaction Frequency}
+    \label{fig:laundering_pairs}
+\end{figure}
+
+These results show that, within the analysed dataset, laundering activity is more
+concentrated among low-frequency account relationships than among highly recurring
+relationships. This demonstrates the value of performing relationship-level aggregation rather than
+analysing transactions independently. The PySpark process groups transactions
+according to the originating and receiving account combination and then calculates the
+number of transactions and laundering transactions associated with each account pair.
+These account-level results can subsequently be grouped into transaction-frequency
+categories to compare laundering rates across different relationship types.
+
+\subsection{Temporal Laundering Patterns}
+
+The daily aggregation examines how laundering activity varies over time. The results
+show variation in the observed laundering rate across the analysis period, indicating
+that laundering activity is not uniformly distributed across days. This distribution can be seen in \autoref{fig:laundering_daily}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/daily_laundering.png}
+    \caption{Daily Money-Laundering Rate}
+    \label{fig:laundering_daily}
+\end{figure}
+
+PySpark groups transactions by the derived \emph{Date} field and calculates the total
+transaction count and laundering count for each day, from which the daily laundering
+rate is calculated. The resulting time-series shows that laundering activity varies across
+the analysis period rather than being uniformly distributed. The analysis also indicates
+higher observed laundering activity during periods of lower overall transaction volume,
+consistent with the Part 1 finding that laundering occurred mainly during weekends. This
+demonstrates how distributed grouping and aggregation can transform transaction-level
+records into a temporal summary and reveal patterns that may not be apparent from
+individual transactions.
+
+\subsection{Overall Technical Interpretation}
+
+From a technical perspective, the analysis demonstrates the suitability of distributed
+computing for financial crime analytics. Operations such as:
+
+\begin{itemize}
+    \item Mapping transaction attributes
+    \item Grouping records by payment format, bank, and account pairs
+    \item Aggregating millions of records into summary statistics
+\end{itemize}
+
+were executed using PySpark's distributed architecture.
+
+Instead of analysing more than 176 million transactions individually, distributed
+reduction operations produced compact summaries that exposed meaningful laundering
+patterns while maintaining computational efficiency. The results therefore demonstrate
+both analytical value and the practical benefits of distributed data processing for large-scale financial datasets.

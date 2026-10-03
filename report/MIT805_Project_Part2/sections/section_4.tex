@@ -1,0 +1,47 @@
+\section{Business/societal Interpretation \& Value}
+
+The analysis demonstrated that laundering activity was not distributed uniformly across
+payment formats, originating banks and account relationships. These patterns illustrate
+how distributed transaction analytics can support financial crime monitoring by
+identifying transaction characteristics that may warrant further investigation.
+
+\subsection{Value to Financial Institutions}
+
+For financial institutions, the analysis demonstrates how large-scale transaction data
+can be used to prioritise transactions and relationships for further investigation. For
+example, payment formats with higher observed laundering rates can be incorporated
+into risk-monitoring rules, while account relationships showing unusual frequency or
+reciprocal activity can be subjected to additional review. Bank-level aggregation can
+also assist institutions in identifying concentrations of labelled laundering activity within
+their transaction-processing environment.
+
+The key value of the distributed approach is scalability. Rather than analysing
+transactions individually, PySpark can aggregate large numbers of records across
+multiple dimensions, allowing AML analysts to examine patterns across payment
+formats, institutions and account relationships.
+
+\subsection{Value to Regulators and Financial-crime Researchers}
+
+The approach can also support regulators and financial-crime researchers by providing
+a framework for analysing transaction patterns at scale. Aggregated indicators can
+assist with identifying areas requiring further investigation and can support the
+development and evaluation of AML monitoring approaches.
+
+\subsection{Societal value}
+
+Effective AML monitoring can contribute to the integrity of the financial system by
+improving the identification of potentially illicit transaction activity. More efficient
+prioritisation of transactions for investigation may reduce the resources required to
+review large volumes of transactions and allow investigators to focus on patterns that
+warrant further examination. Improved identification of suspicious transaction activity
+may also contribute to reducing the financial impact of fraud, organised crime and other
+illicit activities that depend on the movement of funds through the financial system.
+
+\subsection{Limitations}
+
+Two important limitations affect the interpretation of the results.
+
+\begin{enumerate}
+    \item Synthetic data: The dataset is synthetic and therefore may not fully represent the behaviour, complexity or diversity of real-world financial transactions and money-laundering techniques.
+    \item Historical Snapshot: The processed dataset covers a specific period between August 2022 and November 2022 and therefore may not reflect changing money-laundering strategies over time.
+\end{enumerate}
