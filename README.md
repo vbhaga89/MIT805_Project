@@ -74,9 +74,14 @@ pip install -r requirements.txt
 ```
 
 Open the notebooks in VS Code or Jupyter and run them in the order listed
-above. The Part 1 notebooks use relative paths such as `../data/...`, so run them
-from their normal location in the `notebooks` directory. The raw transaction
-file is very large; ensure sufficient disk space and memory before rebuilding
-the derived files. For the Part 2 notebook, a cloud notebook environment with PySpark is required to execute the distributed
-MapReduce examples. For this project, Colab was used. As a result, `DATA_PATH` should be specified
-to where your cleaned data (parquet file) would be located on your Google Drive.
+above. The Part 1 notebooks use relative paths such as `../data/...`, so run
+them from their normal location in the `notebooks` directory. The raw
+transaction file is very large; ensure sufficient disk space and memory before
+rebuilding the derived files.
+
+For ease of use with PySpark, run the Part 2 notebook
+(`notebooks/part2_pyspark_mapreduce.ipynb`) in **Google Colab**. A cloud
+notebook environment with PySpark is required to execute its distributed
+MapReduce examples. Before running it, set `DATA_PATH` to the location of the
+cleaned Parquet file on your Google Drive. This is the reason PySpark is not
+included in the requirements.txt file.
