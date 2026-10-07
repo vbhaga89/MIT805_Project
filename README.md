@@ -8,6 +8,10 @@ possible money laundering. The workflow is split across two parts:
 - **Part 2**: PySpark-based distributed analytics and MapReduce-style
   processing for larger-scale grouped and reduced transaction analysis.
 
+A video explanation of the project can be found at the following link: 
+
+https://drive.google.com/drive/folders/1sw-wnrAZM-gNFNkNOMcVXW0TnHtQBlGS?usp=sharing
+
 ### Project workflow
 
 The notebooks form a sequential pipeline for the full analysis:
